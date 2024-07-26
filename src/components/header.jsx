@@ -1,15 +1,12 @@
 import { CirclePlus } from "lucide-react";
 import todologo from "../assets/Logo.svg";
 
-
-
 export const Header = () => {
-
-  const handleFormSubmit = (e)=>{
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     console.log("form data", formData.get("todo"));
-  }
+  };
 
   return (
     <>
@@ -27,8 +24,12 @@ export const Header = () => {
               />
 
               <div className="bg-[#1E6F9F] px-4 py-2 rounded-lg flex items-center gap-2">
-                <button type="submit">Create</button>
-                <CirclePlus size={20} />
+                <button className="flex gap-2 items-center" type="submit">
+                  <p>Create</p>
+                  <span>
+                    <CirclePlus size={20} />
+                  </span>
+                </button>
               </div>
             </div>
           </form>
