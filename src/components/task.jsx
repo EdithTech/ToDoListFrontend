@@ -1,14 +1,21 @@
+import axios from "axios";
 import { CircleCheck, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-const Task = () => {
+const Task = ({todo}) => {
+  // console.log("task", todo);
+
   const [isClicked, setIsClicked] = useState(false);
+
   const handleCheckBoxClick = () => {
-    setIsClicked((prevState) => !prevState);
+    // setIsClicked((prevState) => !prevState);
+    const response = axios.post(`http://localhost:3000/todo/toggleToDoDone/${todo._id}`);
   };
 
   const handleOnClickDelete = () => {
     console.log("Delete Clicked");
+    const response = axios.post(`http://localhost:3000/todo/deleteToDo/${todo._id}`);
+
   };
 
   return (
@@ -16,7 +23,7 @@ const Task = () => {
       <div className="flex gap-4 items-center">
         <div>
           <button onClick={handleCheckBoxClick}>
-            {isClicked ? (
+            {todo.done ? (
               <CircleCheck size={16} color="#4EA8DE" />
             ) : (
               <div className="min-w-4 min-h-4 rounded-full border-solid border-2 border-[#4EA8DE]"></div>
@@ -24,10 +31,9 @@ const Task = () => {
           </button>
         </div>
         <div>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Earum
-            inventore sapiente quos harum enim ad accusantium atque consequatur
-            delectus eius?
+          <p className={`${todo.done && "line-through"}`}>
+            {/* dahhfdhs */}
+            {todo.data}
           </p>
         </div>
       </div>
