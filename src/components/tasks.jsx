@@ -5,13 +5,13 @@ import axios from "axios";
 export const Tasks = () => {
   const [allToDos, setAllTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [created, setCreated] = useState(false)
+  const [created, setCreated] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/todo/getToDos');  
+        const response = await axios.get('https://to-do-list-backend-five.vercel.app/todo/getToDos');  
         if (response.data && Array.isArray(response.data.allToDos)) {
           setAllTodos(response.data.allToDos);
         } else {

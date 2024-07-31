@@ -9,12 +9,12 @@ const Task = ({todo}) => {
 
   const handleCheckBoxClick = () => {
     // setIsClicked((prevState) => !prevState);
-    const response = axios.post(`http://localhost:3000/todo/toggleToDoDone/${todo._id}`);
+    const response = axios.post(`https://to-do-list-backend-five.vercel.app/todo/toggleToDoDone/${todo._id}`);
   };
 
   const handleOnClickDelete = () => {
     console.log("Delete Clicked");
-    const response = axios.post(`http://localhost:3000/todo/deleteToDo/${todo._id}`);
+    const response = axios.post(`https://to-do-list-backend-five.vercel.app/todo/deleteToDo/${todo._id}`);
 
   };
 
