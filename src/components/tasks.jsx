@@ -3,7 +3,10 @@ import Task from "./task";
 import axios from "axios";
 
 export const Tasks = () => {
-  const [allToDos, setAllTodos] = useState([]);
+  
+  const [allToDos, setAllToDos] = useState([]);
+  const [pinnedToDo, setPinnedToDo] = useState([]);
+  const [unpinnedToDo, setUnpinnedToDo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [created, setCreated] = useState(false);
 
@@ -12,10 +15,15 @@ export const Tasks = () => {
       try {
         setIsLoading(true);
         const response = await axios.get('https://to-do-list-backend-five.vercel.app/todo/getToDos');  
-        if (response.data && Array.isArray(response.data.allToDos)) {
-          setAllTodos(response.data.allToDos);
+        if (response.data) {
+          setAllToDos(response.data.allToDos);
+          setPinnedToDo(response.data.pinnedTodos);
+          setUnpinnedToDo(response.data.unPinnedTodos);
+          // console.log('unpin', response.data.unPinnedTodos);
+          
         } else {
-          setAllTodos([]);
+          setUnpinnedToDo([]);
+          setPinnedToDo([]);
         }
         setIsLoading(false);
       } catch (error) {
@@ -57,7 +65,14 @@ export const Tasks = () => {
           </div>
           <div className="flex flex-col gap-2">
             {
-              allToDos?.map((todo)=>{
+              pinnedToDo?.map((todo)=>{
+                // console.log('alltodo', todo.data);
+                return <Task key={todo._id} todo={todo} />;
+              })
+            }
+
+            {
+              unpinnedToDo?.map((todo)=>{
                 // console.log('alltodo', todo.data);
                 return <Task key={todo._id} todo={todo} />;
               })
