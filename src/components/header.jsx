@@ -1,10 +1,12 @@
 import { CirclePlus } from "lucide-react";
 import todologo from "../assets/Logo.svg";
 import axios from "axios";
+import store from "../utils";
 
 export const Header = () => {
   const handleLogout = () => {
     console.log("Logged out");
+    store.remove("token");
   };
   const handleFormSubmit = async (e) => {
     e.preventDefault();

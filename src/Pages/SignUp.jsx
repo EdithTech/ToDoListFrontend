@@ -1,8 +1,13 @@
 import { Button, Input } from "@nextui-org/react";
 import { Formik } from "formik";
 import todologo from "../assets/Logo.svg";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const backendUrl = "https://to-do-list-backend-five.vercel.app";
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="min-h-[230px] bg-black flex flex-col justify-center items-center relative">
@@ -14,8 +19,7 @@ const SignUp = () => {
                 email: "",
                 password: "",
                 phone: "",
-                fName: "",
-                lName: "",
+                name:"",
                 username: "",
               }}
               validate={(values) => {
@@ -29,8 +33,15 @@ const SignUp = () => {
                 }
                 return errors;
               }}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting }) => {
                 console.log(values);
+                const response = await axios.post(
+                  `${backendUrl}/user/signup`,
+                  values
+                );
+
+                console.log("User Created", response.data);
+                navigate('/login');
                 setSubmitting(false);
               }}
             >
@@ -46,25 +57,16 @@ const SignUp = () => {
               }) => (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                   <div className="font-bold text-2xl text-center">Sign Up</div>
-                  <div className="flex gap-2">
-                    <Input
-                      label="First Name"
-                      type="text"
-                      name="fName"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.fName}
-                    />
 
-                    <Input
-                      label="Last Name"
-                      type="text"
-                      name="lName"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.lName}
-                    />
-                  </div>
+                  <Input
+                    label="Full Name"
+                    type="text"
+                    name="name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                  />
+
                   <Input
                     label="Phone"
                     type="text"
