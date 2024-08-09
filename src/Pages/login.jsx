@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import todologo from "../assets/Logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import store from "../utils/index.js";
-import { apiClient } from "../services/index.js";
+import {apiClient} from "../services"
 
 // const backendUrl = "https://to-do-list-backend-five.vercel.app";
 // const backendUrl = "http://localhost:3000";
@@ -13,6 +13,14 @@ const Login = () => {
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
+      // const response = await axios.post(
+      //   `${backendUrl}/user/login`,
+      //   values
+      // );
+
+      console.log("be url", process.env.REACT_APP_BACKEND_URL);
+      
+
       const response = await apiClient.post(
         `/user/login`,
         values
