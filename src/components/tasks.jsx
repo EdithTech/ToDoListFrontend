@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Task from "./task";
 import axios from "axios";
 import store from "../utils";
+import { apiClient } from "../services";
 
 const backendUrl = "http://localhost:3000";
 // const backendUrl = "https://to-do-list-backend-five.vercel.app";
@@ -18,7 +19,7 @@ export const Tasks = () => {
     const fetchTodos = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`${backendUrl}/todo/getToDos`, {
+        const response = await apiClient.get(`/todo/getToDos`, {
           headers: {
             "userId": store.get("userId"),
             "Authorization": store.get("token")
