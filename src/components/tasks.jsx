@@ -43,7 +43,7 @@ export const Tasks = () => {
     };
 
     fetchTodos();
-  }, [created]);
+  }, [created, allToDos]);
 
   var doneToDoCount = () => {
     var count = 0;
