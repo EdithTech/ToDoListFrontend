@@ -18,7 +18,7 @@ const Login = () => {
       //   values
       // );
 
-      console.log("be url", process.env.REACT_APP_BACKEND_URL);
+      // console.log("be url", process.env.REACT_APP_BACKEND_URL);
       
 
       const response = await apiClient.post(
