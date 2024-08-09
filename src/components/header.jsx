@@ -1,12 +1,18 @@
 import { CirclePlus } from "lucide-react";
 import todologo from "../assets/Logo.svg";
-import axios from "axios";
 import store from "../utils";
+import { useNavigate } from "react-router-dom";
+import {apiClient} from "../services"
+
 
 export const Header = () => {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     console.log("Logged out");
     store.remove("token");
+    navigate('/login');
+
   };
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -18,12 +24,20 @@ export const Header = () => {
       data[key] = value;
     });
 
+    data["userId"] = store.get("userId");
+
     console.log("form data", data);
 
     try {
-      const response = await axios.post(
-        "https://to-do-list-backend-five.vercel.app/todo/addToDo",
-        data
+      const response = await apiClient.post(
+        `/todo/addToDo`,
+        data,
+        {
+          headers: {
+            "userId": store.get("userId"),
+            "Authorization": store.get("token")
+          }
+        }
       );
       console.log("res", response);
     } catch (error) {

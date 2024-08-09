@@ -1,44 +1,40 @@
 import { Button, Input } from "@nextui-org/react";
 import { Formik } from "formik";
 import todologo from "../assets/Logo.svg";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import store from "../utils/index.js";
+import { apiClient } from "../services/index.js";
 
-const backendUrl = "https://to-do-list-backend-five.vercel.app";
+// const backendUrl = "https://to-do-list-backend-five.vercel.app";
 // const backendUrl = "http://localhost:3000";
 
 const Login = () => {
-
   const navigate = useNavigate();
 
-  const handleLogin = async (values, { setSubmitting }) => {
-      console.log(values);
-      const response = await axios.post(
-        `${backendUrl}/user/login`,
+  const handleLogin = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const response = await apiClient.post(
+        `/user/login`,
         values
       );
 
-      console.log("token", response?.data?.token);
+      const { token, userId } = response?.data || {};
 
-      store.set("token", response?.data?.toekn);
-
-      if(!response?.data?.token){
-        navigate('/signup');
+      if (!token) {
+        setErrors({ password: "Invalid username or password" });
+        setSubmitting(false);
         return;
       }
 
-      if(response?.data?.token){
-        console.log("logged in success");
-        
-        navigate('/');
-        return;
-        // return (<App />);
-        
-      }
+      store.set("token", token);
+      store.set("userId", userId);
+
+      navigate('/');
+    } catch (error) {
+      setErrors({ password: "Invalid username or password" });
       setSubmitting(false);
     }
-  
+  };
 
   return (
     <div>
@@ -55,7 +51,10 @@ const Login = () => {
                 const errors = {};
                 if (!values.username) {
                   errors.username = "Required";
-                } 
+                }
+                if (!values.password) {
+                  errors.password = "Required";
+                }
                 return errors;
               }}
               onSubmit={handleLogin}
@@ -68,10 +67,9 @@ const Login = () => {
                 handleBlur,
                 handleSubmit,
                 isSubmitting,
-                /* and other goodies */
               }) => (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                  <div className="font-bold text-2xl text-center">Log In </div>
+                  <div className="font-bold text-2xl text-center">Log In</div>
                   <Input
                     label="Username"
                     type="text"
@@ -79,8 +77,10 @@ const Login = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.username}
-                    />
-                    {errors.password && touched.password && errors.password}
+                  />
+                  {errors.username && touched.username && (
+                    <div className="text-red-500">{errors.username}</div>
+                  )}
                   <Input
                     label="Password"
                     type="password"
@@ -89,10 +89,15 @@ const Login = () => {
                     onBlur={handleBlur}
                     value={values.password}
                   />
-                  {errors.password && touched.password && errors.password}
+                  {errors.password && touched.password && (
+                    <div className="text-red-500">{errors.password}</div>
+                  )}
                   <Button color="primary" type="submit" disabled={isSubmitting}>
-                    LogIn
+                    Log In
                   </Button>
+                  <div className="flex justify-center text-blue-400">
+                    <Link to='/signup'>Signup</Link>
+                  </div>
                 </form>
               )}
             </Formik>
@@ -100,7 +105,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import Task from "./task";
 import axios from "axios";
+import store from "../utils";
+
+const backendUrl = "http://localhost:3000";
+// const backendUrl = "https://to-do-list-backend-five.vercel.app";
 
 export const Tasks = () => {
   
@@ -14,7 +18,12 @@ export const Tasks = () => {
     const fetchTodos = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('https://to-do-list-backend-five.vercel.app/todo/getToDos');  
+        const response = await axios.get(`${backendUrl}/todo/getToDos`, {
+          headers: {
+            "userId": store.get("userId"),
+            "Authorization": store.get("token")
+          }
+        });  
         if (response.data) {
           setAllToDos(response.data.allToDos);
           setPinnedToDo(response.data.pinnedTodos);

@@ -3,9 +3,11 @@ import { Formik } from "formik";
 import todologo from "../assets/Logo.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { apiClient } from "../services";
 
 const SignUp = () => {
-  const backendUrl = "https://to-do-list-backend-five.vercel.app";
+  // const backendUrl = "https://to-do-list-backend-five.vercel.app";
+  const backendUrl = "http://localhost:3000";
   const navigate = useNavigate();
 
   return (
@@ -35,8 +37,8 @@ const SignUp = () => {
               }}
               onSubmit={async (values, { setSubmitting }) => {
                 console.log(values);
-                const response = await axios.post(
-                  `${backendUrl}/user/signup`,
+                const response = await apiClient.post(
+                  `/user/signup`,
                   values
                 );
 

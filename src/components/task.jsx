@@ -1,8 +1,7 @@
-import axios from "axios";
 import { CircleCheck, Pencil, Pin, PinOff, Trash2 } from "lucide-react";
 import { useState } from "react";
-
-
+import store from "../utils";
+import { apiClient } from "../services";
 
 const Task = ({ todo }) => {
   // console.log("task", todo);
@@ -11,19 +10,29 @@ const Task = ({ todo }) => {
   const [updateText, setUpdateText] = useState(todo.data);
   // const [isPinned, setIsPinned] = useState(false)
 
-  const vercelBackend = "https://to-do-list-backend-five.vercel.app";
-
   const handleCheckBoxClick = async () => {
     // setIsClicked((prevState) => !prevState);
-    const response = await axios.post(
-      `${vercelBackend}/todo/toggleToDoDone/${todo._id}`
+    const response = await apiClient.post(
+      `/todo/toggleToDoDone/${todo._id}`,{},
+      {
+        headers: {
+          userId: store.get("userId"),
+          Authorization: store.get("token"),
+        },
+      }
     );
   };
 
   const handleOnClickDelete = async () => {
     console.log("Delete Clicked");
-    const response = await axios.post(
-      `${vercelBackend}/todo/deleteToDo/${todo._id}`
+    const response = await apiClient.post(
+      `/todo/deleteToDo/${todo._id}`,{},
+      {
+        headers: {
+          userId: store.get("userId"),
+          Authorization: store.get("token"),
+        },
+      }
     );
   };
 
@@ -42,19 +51,33 @@ const Task = ({ todo }) => {
       data[key] = value;
     });
 
-    const response = await axios.post(
-      `${vercelBackend}/todo/updateToDo/${todo._id}`,
-      data
+    const response = await apiClient.post(
+      `/todo/updateToDo/${todo._id}`,
+      data,
+      {
+        headers: {
+          userId: store.get("userId"),
+          Authorization: store.get("token"),
+        },
+      }
+      
+
     );
     setIsUpdateClicked((pre) => !pre);
   };
 
   const handleOnClickPin = async () => {
     // setIsPinned((pre) => !pre);
-    const response = await axios.post(
-      `${vercelBackend}/todo/pin-unpin/${todo._id}`,
+    const response = await apiClient.post(
+      `/todo/pin-unpin/${todo._id}`,{},
+      {
+        headers: {
+          userId: store.get("userId"),
+          Authorization: store.get("token"),
+        },
+      }
     );
-  }
+  };
 
   return (
     <div className="min-h-14 h-max py-2 px-4 flex items-center gap-2 bg-[#262626] rounded-md justify-between">
@@ -79,20 +102,15 @@ const Task = ({ todo }) => {
                 name="data"
               />
             </form>
-            
           ) : (
-            <p className={`${todo.done && "line-through"}`}>
-              {todo.data}
-            </p>
+            <p className={`${todo.done && "line-through"}`}>{todo.data}</p>
           )}
         </div>
       </div>
 
       <div className="flex items-center gap-2">
         <button onClick={handleOnClickPin}>
-          {
-            !todo.isPinned ? <Pin size={18} /> : <PinOff size={18}/>  
-          }
+          {!todo.isPinned ? <Pin size={18} /> : <PinOff size={18} />}
         </button>
 
         <button onClick={handleOnClickEdit}>
